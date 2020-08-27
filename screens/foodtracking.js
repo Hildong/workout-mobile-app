@@ -18,7 +18,7 @@ export default class Foodtracking extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-          <Text style={styles.containterText}>cardio</Text>
+          <Text style={styles.containterText}>Track your food</Text>
           <TouchableOpacity style={styles.containerBtn} onPress={this.switchText}>
             <Text style={styles.containerBtnText}>
               Press me!
