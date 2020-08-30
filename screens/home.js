@@ -101,7 +101,7 @@ export default class home extends React.Component {
 
 const styles = StyleSheet.create({
   wrapper: {
-    height: 1300,
+    height: 1520,
     justifyContent: 'center',
   },
   homeHeaderDesc: {
@@ -172,9 +172,10 @@ const styles = StyleSheet.create({
     width: "80%",
   },
   containerScreenShortcut: {
-    height: 210,
+    height: 280,
     width: "100%",
     marginLeft: 5,
+    marginTop: 10
   },
   cardioScreenShortcut: {
     marginTop: 10
@@ -193,10 +194,10 @@ const styles = StyleSheet.create({
   },
   horizontalContainerScrolling: {
     width: "97%",
-    marginTop: 10
+    marginTop: 20
   },
   blogOrWorkoutBox: {
-    width: 200,
+    width: 300,
     height: "100%",
     borderColor: "rgba(0, 0, 0, .5)",
     borderStyle: "solid",
