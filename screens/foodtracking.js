@@ -55,7 +55,7 @@ export default class Foodtracking extends React.Component {
           </View>
         )
       }
-      alert(JSON.stringify(foods))
+      alert(JSON.stringify(savedData))
       return foods
   }
 
