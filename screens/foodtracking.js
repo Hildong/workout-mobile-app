@@ -32,33 +32,34 @@ export default class Foodtracking extends React.Component {
     })
   }
 
+
   render() {
 
     let foods = ["hej"]
+    let savedData;
+    let foodDataArray;
     
-    const fetchAPI = async () => {
-      const response = await fetch(`https://api.edamam.com/api/food-database/v2/parser?ingr=chicken&app_id=${this.APP_ID}&app_key=${this.APP_KEY}`, { headers: {
+    function fetchApi() {
+/*      const response = await fetch(`https://api.edamam.com/api/food-database/v2/parser?ingr=chicken&app_id=${this.APP_ID}&app_key=${this.APP_KEY}`, { headers: {
           "access-control-allow-origin" : "*",
           "Content-type": "application/json; charset=UTF-8"
         }})
-      let data = await response.json()
-      return data
+      let data = await response.json()*/
+      fetch(`https://api.edamam.com/api/food-database/v2/parser?ingr=chicken&app_id=${this.APP_ID}&app_key=${this.APP_KEY}`, { headers: {
+        "access-control-allow-origin" : "*",
+        "Content-type": "application/json; charset=UTF-8"
+      }})
+        .then(response => { 
+          return response.json() 
+        })
+        .then(dataResponse => {
+          console.log(JSON.stringify(dataResponse) + "kaka")
+        })
     }
 
-    const saveData = async () => {
-      savedData = await fetchAPI();
-      alert(JSON.stringify(savedData["hints"].length))
-      for(let i = 0; i < JSON.stringify(savedData["hints"].length); i++) {
-        foods.push(
-           <View key={i}>
-            <Text>{i["key"]}</Text>
-          </View>
-        )
-      }
-      alert(JSON.stringify(savedData))
-      return foods
-  }
-
+    function saveData() {
+      console.log(foodDataArray + "ss")
+    }
 
     return (
       <View style={styles.container}>
@@ -69,7 +70,7 @@ export default class Foodtracking extends React.Component {
             
             <TextInput placeholder="Search for your food..." underlineColor="transparent" style={styles.inputFoodItem} />
 
-            <TouchableOpacity style={styles.containerBtn} onPress={() => { this.showFoodItems(); saveData(); }}>    
+            <TouchableOpacity style={styles.containerBtn} onPress={() => { this.showFoodItems(); fetchApi()}}>    
               <Text style={styles.containerBtnText}>
                 Search
               </Text>
@@ -107,9 +108,8 @@ export default class Foodtracking extends React.Component {
               <Text style={styles.hideFoodItemsBtnText}>X</Text>
             </TouchableOpacity>
 
-            <Text style={{color: "white"}}>{foods}</Text>
-
           </View>
+
 
           <StatusBar style="auto" />
 
