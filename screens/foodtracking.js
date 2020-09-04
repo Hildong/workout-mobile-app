@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ActivityIndicator, FlatList} from 'react-native';
 import { TextInput } from 'react-native-paper';
 
 
@@ -10,11 +10,30 @@ export default class Foodtracking extends React.Component {
     super(props),
 
     this.switchText = this.switchText.bind(this);
-    this.state = { foodItemsDisplay: "none", exampleFoodCalorie: "", }
-    this.APP_ID = "def8ae1f";
-    this.APP_KEY = "aef18e49763e07f6c3a98223ec6941d7";
+    this.state = { foodItemsDisplay: "none", exampleFoodCalorie: "",}
+    this.state = {
+      data: [],
+      isLoading: false
+    };
+    let foods = ["hej"]
+    let dataMeme;
+    this.isLoading = true;
+
+    this.APP_ID = "9e44e39e";
+    this.APP_KEY = "3fe7497246875c489c7a623000e10799";
   }
 
+  componentDidMount() {
+    fetch('https://reactnative.dev/movies.json')
+      .then((response) => response.json())
+      .then((json) => {
+        this.setState({ data: json.movies });
+      })
+      .catch((error) => console.error(error))
+      .finally(() => {
+        this.setState({ isLoading: false });
+      });
+  }
   
   switchText() {
     alert("hahah")
@@ -32,34 +51,47 @@ export default class Foodtracking extends React.Component {
     })
   }
 
+  fetchApi() {
+    /*      const response = await fetch(`https://api.edamam.com/api/food-database/v2/parser?ingr=chicken&app_id=${this.APP_ID}&app_key=${this.APP_KEY}`, { headers: {
+              "access-control-allow-origin" : "*",
+              "Content-type": "application/json; charset=UTF-8"
+            }})
+          let data = await response.json()*/
+          fetch(`https://api.edamam.com/api/food-database/v2/parser?ingr=chicken&app_id=${this.APP_ID}&app_key=${this.APP_KEY}`, { headers: {
+            "access-control-allow-origin" : "*",
+          }})
+            .then(response => {
+              return response.json()
+            })
+            .then(dataResponse => {
+              this.dataMeme = dataResponse
+              //data = data.replace('{"text":"chicken","parsed":', " ")
+              console.log("---------------------------------------------\n")
+              console.log(this.dataMeme["hints"].length)
+              for(let i = 0; i < this.dataMeme.length; i++) {
+                //console.log(this.dataMeme[i]["food"]["label"])
+              }
+              this.isLoading = false
+            })
+    
+        }
 
   render() {
 
-    let foods = ["hej"]
-    let savedData;
-    let foodDataArray;
-    
-    function fetchApi() {
-/*      const response = await fetch(`https://api.edamam.com/api/food-database/v2/parser?ingr=chicken&app_id=${this.APP_ID}&app_key=${this.APP_KEY}`, { headers: {
-          "access-control-allow-origin" : "*",
-          "Content-type": "application/json; charset=UTF-8"
-        }})
-      let data = await response.json()*/
-      fetch(`https://api.edamam.com/api/food-database/v2/parser?ingr=chicken&app_id=${this.APP_ID}&app_key=${this.APP_KEY}`, { headers: {
-        "access-control-allow-origin" : "*",
-        "Content-type": "application/json; charset=UTF-8"
-      }})
-        .then(response => { 
-          return response.json() 
-        })
-        .then(dataResponse => {
-          console.log(JSON.stringify(dataResponse) + "kaka")
-        })
+    let movies = [];
+
+    if(!this.isLoading) {
+      console.log("hello yeah")
+      //console.log(this.dataMeme)
+      for(let i = 0; i < this.dataMeme["hints"].length; i++) {
+        console.log(this.dataMeme["hints"][i]["food"]["label"])
+        movies.push(
+          this.dataMeme["hints"][i]["food"]["label"]
+        )
+      }
+      console.log(movies)
     }
 
-    function saveData() {
-      console.log(foodDataArray + "ss")
-    }
 
     return (
       <View style={styles.container}>
@@ -70,7 +102,7 @@ export default class Foodtracking extends React.Component {
             
             <TextInput placeholder="Search for your food..." underlineColor="transparent" style={styles.inputFoodItem} />
 
-            <TouchableOpacity style={styles.containerBtn} onPress={() => { this.showFoodItems(); fetchApi()}}>    
+            <TouchableOpacity style={styles.containerBtn} onPress={() => { this.showFoodItems(); this.fetchApi()}}>    
               <Text style={styles.containerBtnText}>
                 Search
               </Text>
@@ -108,7 +140,9 @@ export default class Foodtracking extends React.Component {
               <Text style={styles.hideFoodItemsBtnText}>X</Text>
             </TouchableOpacity>
 
+            <Text>{movies}</Text>
           </View>
+
 
 
           <StatusBar style="auto" />
